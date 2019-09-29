@@ -1,0 +1,7 @@
+M = ({S, A, B}, {a, b}, F, {S}, {B})
+F(S, a) = A
+F(S, a) = B
+F(S, b) = A
+F(A, b) = S
+F(B, a) = S
+F(B, b) = B
