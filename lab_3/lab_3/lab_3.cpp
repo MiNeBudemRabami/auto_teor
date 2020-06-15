@@ -166,9 +166,11 @@ void clear_repeats()
 	}
 }
 
-void print_dot()
+
+
+void print_dot(deque <line_struct> arr, string name)
 {
-	ofstream fout("graph.dot");
+	ofstream fout(name);
 	{
 		fout << "digraph determination {" << endl;
 		for (;;)
@@ -185,7 +187,7 @@ void print_dot()
 					fout << '\t';
 					break;
 				}
-				fout << arr[0].from[0];
+				fout << arr[0].from[0] << ' ';
 				arr[0].from.pop_front();
 			}
 
@@ -214,6 +216,8 @@ int main()
 {
 	read_file();
 
+	print_dot(arr, "infraph.dot");
+
 	glue_to();
 
 	new_line();
@@ -222,5 +226,5 @@ int main()
 
 	clear_repeats();
 
-	print_dot();
+	print_dot(arr, "graph.dot");
 }
