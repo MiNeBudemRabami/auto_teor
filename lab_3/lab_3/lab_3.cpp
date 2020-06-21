@@ -117,41 +117,42 @@ void arr_sort()
 
 void new_line()
 {
-	arr_sort();
-
 	for (size_t i = 0; i < arr.size(); i++)
 	{
-		for (size_t j = 0; j < arr.size(); j++)
+		for (size_t j = i + 1; j < arr.size(); j++)
 		{
 			for (size_t k = 0; k < arr[i].to.size(); k++)
 			{
-				if ((arr[i].to[k] == arr[j].from[0]) and (arr[i].to.size() > 1))
+				if ((arr[i].to[k] == arr[j].from[0]) && (arr[i].to.size() > 1) && (arr[i].to != arr[j].from))
 				{
 					line_struct new_trans_line;
 					new_trans_line.from = arr[i].to;
 					new_trans_line.by = arr[j].by;
 					new_trans_line.to = arr[j].to;
-					arr.push_back(new_trans_line);
+					arr2.push_back(new_trans_line);
 
 					for (size_t m = 0; m < arr.size(); m++)
 					{
-						for (size_t n = 0; n < arr[m].to.size(); n++)
+						if ((arr[i].to == arr[m].to) && (m < arr.size() - 1))
 						{
-							if ((arr[i].to == arr[m].to) )
-							{
-								++m;
-							}
+							continue;
+						}
+						else if ((arr[i].to == arr[m].to) && (m == arr.size() - 1))
+						{
+							//break;
+						}
 
-							if (m + 1 == arr.size() && arr[j].from[0] != arr[m].to[n])
-							{
-								arr.erase(arr.begin() + j);
-								break;
-							}
+						if ((arr[j].from == arr[m].to))
+						{
+							break;
+						}
+
+						if ((arr[j].from != arr[m].to) && (m == arr.size() - 1))
+						{
+							arr.erase(arr.begin() + j);
+							break;
 						}
 					}
-
-					arr_sort();
-
 				}
 			}
 		}
@@ -222,6 +223,10 @@ int main()
 	clear_repeats();
 
 	glue_to();
+
+	new_line();
+
+	merge_arr();
 
 	new_line();
 
