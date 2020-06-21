@@ -21,53 +21,66 @@ void read_file()
 {
 	line_struct trans_line;
 
-	string temp;
-	string from;
-	string to;
-	string by;
-
 	for (;;)
 	{
-		cin >> temp;
+		string from = "";
+		string to = "";
+
+		cin >> from >> trans_line.by >> to;
+
+		trans_line.from.push_back(from);
+		trans_line.to.push_back(to);
+
 
 		if (cin.eof())
 		{
 			break;
 		}
 
-		for (size_t i = 0; i < temp.size(); i++)
+		arr.push_back(trans_line);
+		trans_line.from.clear();
+		trans_line.to.clear();
+	}
+}
+
+void print_info_line()
+{
+	cout << "from" << '\t' << "by" << '\t' << "to" << endl;
+}
+
+void print_output()
+{
+	for (;;)
+	{
+		if (arr.empty())
 		{
-			if (temp[i] != '-')
-			{
-				from.push_back(temp[i]);
-			}
-			else
-			{
-				for (size_t j = i + 2; j < temp.size(); j++)
-				{
-					to.push_back(temp[j]);
-				}
-				break;
-			}
+			break;
 		}
 
-		cin >> by;
-		by.erase(0, 7);
-		by.pop_back();
-		by.pop_back();
+		for (;;)
+		{
+			if (arr[0].from.empty())
+			{
+				cout << '\t';
+				break;
+			}
+			cout << arr[0].from[0];
+			arr[0].from.pop_front();
+		}
 
-		trans_line.by = by;
-		trans_line.to.push_back(to);
-		trans_line.from.push_back(from);
-		arr.push_back(trans_line);
+		cout << arr[0].by << '\t';
 
-		trans_line.to.clear();
-		trans_line.by.clear();
-		trans_line.from.clear();
-		temp.clear();
-		by.clear();
-		from.clear();
-		to.clear();
+		for (;;)
+		{
+			if (arr[0].to.empty())
+			{
+				break;
+			}
+			cout << arr[0].to[0];
+			arr[0].to.pop_front();
+		}
+		cout << endl;
+		arr.pop_front();
 	}
 }
 
@@ -88,6 +101,44 @@ void glue_to()
 	}
 }
 
+void new_line()
+{
+	for (size_t i = 0; i < arr.size(); i++)
+	{
+		for (size_t j = 0; j < arr.size(); j++)
+		{
+			for (size_t k = 0; k < arr[i].to.size(); k++)
+			{
+				if ((arr[i].to[k] == arr[j].from[0]))
+				{
+					line_struct new_trans_line;
+					new_trans_line.from = arr[i].to;
+					new_trans_line.by = arr[j].by;
+					new_trans_line.to = arr[j].to;
+					arr2.push_back(new_trans_line);
+
+					for (size_t m = j + 1; m < arr.size(); m++)
+					{
+						for (size_t n = 0; n < arr[m].to.size(); n++)
+						{
+							if ((arr[j].from[0] != arr[m].to[n]) and (m == arr.size() - 1))
+							{
+								arr.erase(arr.begin() + j);
+								if (j > 0)	j--;
+								if (i > 0)	i--;
+								break;
+
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
 void merge_arr()
 {
 	for (;;)
@@ -98,63 +149,6 @@ void merge_arr()
 		}
 		arr.push_back(arr2[0]);
 		arr2.pop_front();
-	}
-}
-
-void arr_sort()
-{
-	for (size_t i = 0; i < arr.size(); i++)
-	{
-		for (size_t j = 0; j < arr.size(); j++)
-		{
-			if (arr[i].from[0] < arr[j].from[0])
-			{
-				swap(arr[i], arr[j]);
-			}
-		}
-	}
-}
-
-void new_line()
-{
-	arr_sort();
-
-	for (size_t i = 0; i < arr.size(); i++)
-	{
-		for (size_t j = 0; j < arr.size(); j++)
-		{
-			for (size_t k = 0; k < arr[i].to.size(); k++)
-			{
-				if ((arr[i].to[k] == arr[j].from[0]) and (arr[i].to.size() > 1))
-				{
-					line_struct new_trans_line;
-					new_trans_line.from = arr[i].to;
-					new_trans_line.by = arr[j].by;
-					new_trans_line.to = arr[j].to;
-					arr.push_back(new_trans_line);
-
-					for (size_t m = 0; m < arr.size(); m++)
-					{
-						for (size_t n = 0; n < arr[m].to.size(); n++)
-						{
-							if ((arr[i].to == arr[m].to) )
-							{
-								++m;
-							}
-
-							if (m + 1 == arr.size() && arr[j].from[0] != arr[m].to[n])
-							{
-								arr.erase(arr.begin() + j);
-								break;
-							}
-						}
-					}
-
-					arr_sort();
-
-				}
-			}
-		}
 	}
 }
 
@@ -172,9 +166,9 @@ void clear_repeats()
 	}
 }
 
-void print_dot(string name)
+void print_dot()
 {
-	ofstream fout(name);
+	ofstream fout("graph.dot");
 	{
 		fout << "digraph determination {" << endl;
 		for (;;)
@@ -188,6 +182,7 @@ void print_dot(string name)
 			{
 				if (arr[0].from.empty())
 				{
+					fout << '\t';
 					break;
 				}
 				fout << arr[0].from[0];
@@ -200,14 +195,14 @@ void print_dot(string name)
 			{
 				if (arr[0].to.empty())
 				{
-					fout << ' ';
+					fout << '\t';
 					break;
 				}
 				fout << arr[0].to[0];
 				arr[0].to.pop_front();
 			}
 
-			fout << "[label=" << arr[0].by << "];" << ' ' << endl;
+			fout << "[label = " << arr[0].by << "];" << '\t' << endl;
 
 			arr.pop_front();
 		}
@@ -219,13 +214,13 @@ int main()
 {
 	read_file();
 
-	clear_repeats();
-
 	glue_to();
 
 	new_line();
 
+	merge_arr();
+
 	clear_repeats();
 
-	print_dot("result.dot");
+	print_dot();
 }

@@ -1,0 +1,27 @@
+digraph determination {
+s9->s10 [label=x5]; 
+s8->s9 [label=x4]; 
+s7->z [label=x4]; 
+s6->s7 [label=x5]; 
+s5->s6 [label=x0]; 
+s4->b [label=x7]; 
+s2->a [label=x3]; 
+s12->z [label=x6]; 
+s11->s12 [label=x4]; 
+s10->z [label=x4]; 
+f->s11 [label=x0]; 
+f->s5 [label=x4]; 
+f->s8 [label=x6]; 
+e->sz [label=x6]; 
+d->sz [label=x6]; 
+c->e [label=x5]; 
+b->e [label=x5]; 
+b->z [label=x2]; 
+a->z [label=x2]; 
+a->d [label=x5]; 
+cs1s3->s4 [label=x0]; 
+cs1s3->s2 [label=x3]; 
+sz->f [label=x2]; 
+sz->cs1s3 [label=x4]; 
+cs1s3->z [label=x2]; 
+}
