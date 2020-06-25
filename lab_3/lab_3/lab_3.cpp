@@ -119,29 +119,47 @@ void new_line()
 {
 	for (size_t i = 0; i < arr.size(); i++)
 	{
-		for (size_t j = i + 1; j < arr.size(); j++)
+		for (size_t j = 0; j < arr.size(); j++)
 		{
 			for (size_t k = 0; k < arr[i].to.size(); k++)
 			{
-				if ((arr[i].to[k] == arr[j].from[0]) && (arr[i].to.size() > 1) && (arr[i].to != arr[j].from))
+				/*
+				if (i == j)
 				{
-					line_struct new_trans_line;
-					new_trans_line.from = arr[i].to;
-					new_trans_line.by = arr[j].by;
-					new_trans_line.to = arr[j].to;
-					arr2.push_back(new_trans_line);
+					continue;
+				}
+				
+				*/
 
+
+				if ((arr[i].to == arr[j].from) && (arr[i].to.size() > 1))
+				{
+					continue;
+				}
+
+				if ((arr[i].to == arr[j].to) && (i != j))
+				{
+					continue;
+				}
+
+				if ((arr[i].to[k] == arr[j].from[0]) && (arr[i].to.size() > 1) && (arr[j].from.size() == 1))
+				{
+					line_struct new_trans_line1;
+					line_struct new_trans_line2;
+					new_trans_line1.from = arr[i].to;
+					new_trans_line1.by = arr[j].by;
+					new_trans_line1.to = arr[j].to;
+					arr.push_back(new_trans_line1);
+					
 					for (size_t m = 0; m < arr.size(); m++)
 					{
-						if ((arr[i].to == arr[m].to) && (m < arr.size() - 1))
+						/*
+						if ((arr[i].to == arr[m].to) && (m != arr.size()-1))
 						{
 							continue;
 						}
-						else if ((arr[i].to == arr[m].to) && (m == arr.size() - 1))
-						{
-							//break;
-						}
-
+						*/
+						
 						if ((arr[j].from == arr[m].to))
 						{
 							break;
@@ -151,6 +169,32 @@ void new_line()
 						{
 							arr.erase(arr.begin() + j);
 							break;
+						}
+					
+					}
+				}
+			}
+		}
+	}
+}
+
+void dell_ost()
+{
+	for (size_t i = 0; i < arr.size(); i++)
+	{
+		for (size_t j = i + 1; j < arr.size(); j++)
+		{
+			for (size_t k = 0; k < arr[j].to.size(); k++)
+			{
+				if ((arr[i].from[0] == arr[j].from[k]) && (arr[i].from.size() == 1))
+				{
+					for (size_t m = 0; m < arr.size(); m++)
+					{
+						for (size_t n = 0; n < arr[m].to.size(); n++)
+						{
+							
+							{
+							}
 						}
 					}
 				}
@@ -225,8 +269,6 @@ int main()
 	glue_to();
 
 	new_line();
-
-	merge_arr();
 
 	new_line();
 
