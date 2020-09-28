@@ -207,8 +207,13 @@ void clear_repeats()
 {
 	for (size_t i = 0; i < arr.size(); i++)
 	{
-		for (size_t j = i + 1; j < arr.size(); j++)
+		for (size_t j = 0; j < arr.size(); j++)
 		{
+			if (i == j)
+			{
+				continue;
+			}
+
 			if ((arr[i].from == arr[j].from) and (arr[i].to == arr[j].to) and (arr[i].by == arr[j].by))
 			{
 				arr.erase(arr.begin() + j);
